@@ -18,7 +18,7 @@ class UltrasonicSensor {
       Serial.print("Testing Ultrasonics Sensor");Serial.println("");
       delay(10);
     
-      for (int i = 0; i < 15; i++) {
+      for (int i = 0; i < 10; i++) {
         digitalWrite(trigPin, LOW);
         delayMicroseconds(5);
         digitalWrite(trigPin, HIGH);

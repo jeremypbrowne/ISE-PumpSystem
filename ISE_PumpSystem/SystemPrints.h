@@ -18,7 +18,9 @@ class SystemPrints {
   SystemPrints(){};
 
     
-    int printHeaders(){      
+    int printHeaders(){  
+      Serial.print("Time (min)");
+      Serial.print("\t");         
       Serial.print("inchesAVG: ");
       Serial.print("\t");
       Serial.print("High Float: "); 
@@ -29,20 +31,42 @@ class SystemPrints {
      }
 
     int SystemState() {
-
+      float j = millis();
+      Serial.print(j/60000);
+      Serial.print("\t\t");
+      delay(10);
       float Level = WaterLevel.MIX_WaterLevel();
-      MIX_High = MixFloat.checkMIX(MixFloat.MIX_HIGH);
-      MIX_Full = MixFloat.checkMIX(MixFloat.MIX_FULL);
-      MIX_Low = MixFloat.checkMIX(MixFloat.MIX_LOW);
-
-
       Serial.print(Level);
-      Serial.print("\t\t");
-      Serial.print(MIX_High);
-      Serial.print("\t\t");
-      Serial.print(MIX_Full);
-      Serial.print("\t\t");
-      Serial.println(MIX_Low);
+      MIX_High = MixFloat.checkMIX(MixFloat.MIX_HIGH);
+      if(MIX_High == 1){
+        Serial.print("\t\t");
+        Serial.print("OFF");
+      }
+      else{
+        Serial.print("\t\t");
+        Serial.print("TRIPPED");        
+      }
+      MIX_Full = MixFloat.checkMIX(MixFloat.MIX_FULL);
+      if(MIX_Full == 1){
+        Serial.print("\t\t");
+        Serial.print("OFF");
+      }
+      else{
+        Serial.print("\t\t");
+        Serial.print("TRIPPED");        
+      }
+      MIX_Low = MixFloat.checkMIX(MixFloat.MIX_LOW);
+      if(MIX_Low == 1){
+        Serial.print("\t\t");
+        Serial.println("OFF");
+      }
+      else{
+        Serial.print("\t\t");
+        Serial.println("TRIPPED");        
+      }
+
+
+
 
     };
 

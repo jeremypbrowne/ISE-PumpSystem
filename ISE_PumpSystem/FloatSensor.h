@@ -20,7 +20,7 @@ class FloatSensor {
 
     int checkMIX(int sensor){
       int Mix_level = digitalRead(sensor);
-
+    
       return(Mix_level);    
     };
     

@@ -5,6 +5,7 @@
 
 FloatSensor Float;
 SystemPrints Output;
+UltrasonicSensor pumpSensor;
 
 class PumpControl {
 
@@ -21,12 +22,15 @@ class PumpControl {
     int ISE = 8;        // in6 -ISE Persitaltic
     float t;
 
-    int RunPump(int pump, int duration, int Switch){
+    int RunPump(int pump, float duration, int Switch){
 
         digitalWrite(pump,LOW);
         Output.printHeaders();
+        delay(10);
         if(Switch == 1){
           t = millis();
+          delay(100);
+          Serial.println(t/60000);
           while((millis() - t) < duration){
             Output.SystemState();
           }
@@ -45,24 +49,23 @@ class PumpControl {
         }        
         else if(Switch == 4){
           t = millis();
-          while((millis() - t) < duration && Float.checkMIX(Float.MIX_LOW) != 0){
+          while((millis() - t) < duration && Float.checkMIX(Float.MIX_LOW) != 1){
             Output.SystemState();           
           }     
         }        
         digitalWrite(pump,HIGH);    
-        Serial.print(pump);Serial.println(" OFF");  
       }
 
     int primePUMPS() {
 
-//      Serial.println("Prime Pumps");
-//      if( Float.checkDI() == !LOW){
-//        Serial.println("DI RESERVE TOO LOW - System End - PLEASE REFIL");
-//        while(1);
-//      }
-//      else{
-//        Serial.print("DI Sensor State: "); Serial.println(Float.checkDI());
-//      }
+      Serial.println("Prime Pumps");
+      if( Float.checkDI() == !LOW){
+        Serial.println("DI RESERVE TOO LOW - System End - PLEASE REFIL");
+        while(1);
+      }
+      else{
+        Serial.print("DI Sensor State: "); Serial.println(Float.checkDI());
+      }
 
       // So that all conecting tubes have fluid in the - no lag time to fill
       // Fills tant drains the mixing chamber
@@ -101,7 +104,7 @@ class PumpControl {
         delay(5000);
         digitalWrite(Drain, HIGH);
   
-        Serial.println("Calibration Fill");
+        Serial.println("Calibration Fill");   
 
         Output.printHeaders();
         while(Float.checkMIX(Float.MIX_FULL) != 0){
@@ -111,7 +114,8 @@ class PumpControl {
         digitalWrite(DI_Water, HIGH);
         Serial.print("Pump OFF");
         delay(500);
-  
+
+        float calib = pumpSensor.calibration(); // ultrasonic sensor adjustment
  
 
         Serial.println("Drain the Mix");

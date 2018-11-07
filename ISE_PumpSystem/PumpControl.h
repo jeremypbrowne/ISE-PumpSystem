@@ -21,25 +21,48 @@ class PumpControl {
     int ISE = 8;        // in6 -ISE Persitaltic
     float t;
 
-    int RunPump(int pump, int duration){
+    int RunPump(int pump, int duration, int Switch){
+
         digitalWrite(pump,LOW);
         Output.printHeaders();
-        t = millis();
-        while((millis() - t) < duration){
-        Output.SystemState();
-        }      
-    }
+        if(Switch == 1){
+          t = millis();
+          while((millis() - t) < duration){
+            Output.SystemState();
+          }
+        }
+        else if(Switch == 2){
+          t = millis();
+          while((millis() - t) < duration && Float.checkMIX(Float.MIX_HIGH) != 0  ){
+            Output.SystemState();           
+          }
+        }
+        else if(Switch == 3){
+          t = millis();
+          while((millis() - t) < duration && Float.checkMIX(Float.MIX_FULL) == 1){
+            Output.SystemState();           
+          }
+        }        
+        else if(Switch == 4){
+          t = millis();
+          while((millis() - t) < duration && Float.checkMIX(Float.MIX_LOW) != 0){
+            Output.SystemState();           
+          }     
+        }        
+        digitalWrite(pump,HIGH);    
+        Serial.print(pump);Serial.println(" OFF");  
+      }
 
     int primePUMPS() {
 
-      Serial.println("Prime Pumps");
-      if( Float.checkDI() == !LOW){
-        Serial.println("DI RESERVE TOO LOW - System End - PLEASE REFIL");
-        while(1);
-      }
-      else{
-        Serial.print("DI Sensor State: "); Serial.println(Float.checkDI());
-      }
+//      Serial.println("Prime Pumps");
+//      if( Float.checkDI() == !LOW){
+//        Serial.println("DI RESERVE TOO LOW - System End - PLEASE REFIL");
+//        while(1);
+//      }
+//      else{
+//        Serial.print("DI Sensor State: "); Serial.println(Float.checkDI());
+//      }
 
       // So that all conecting tubes have fluid in the - no lag time to fill
       // Fills tant drains the mixing chamber
@@ -67,7 +90,7 @@ class PumpControl {
 
         Serial.println("Drain the Mix");
         Output.printHeaders();
-        while(Float.checkMIX_L() != 1) { 
+        while(Float.checkMIX(Float.MIX_LOW) != 1) { 
           digitalWrite(Drain, LOW);
           Output.SystemState();
         }
@@ -81,7 +104,7 @@ class PumpControl {
         Serial.println("Calibration Fill");
 
         Output.printHeaders();
-        while(Float.checkMIX_F() != 0){
+        while(Float.checkMIX(Float.MIX_FULL) != 0){
         digitalWrite(DI_Water, LOW);
         Output.SystemState();
         }
@@ -93,7 +116,7 @@ class PumpControl {
 
         Serial.println("Drain the Mix");
         Output.printHeaders();
-        while(Float.checkMIX_L() != 1){ 
+        while(Float.checkMIX(Float.MIX_LOW) != 1){ 
           digitalWrite(Drain, LOW);
           Output.SystemState();
         }
@@ -102,7 +125,7 @@ class PumpControl {
         delay(500);
         digitalWrite(Drain, LOW);
         float t  = millis();
-        while((millis() - t) < 75000 && Float.checkMIX_L() != 0){
+        while((millis() - t) < 75000 && Float.checkMIX(Float.MIX_LOW) != 0){
           Output.SystemState();
         }
  

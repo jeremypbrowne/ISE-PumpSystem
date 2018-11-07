@@ -5,6 +5,8 @@ class UltrasonicSensor {
 
   private:
       
+  public:
+  
     int trigPin = 7;     // Trigger - brown wire
     int echoPin = 6;    // Echo - gray wire
     float duration, cm, inches,inchesLAST;
@@ -12,9 +14,6 @@ class UltrasonicSensor {
     float inchesAVG = 0; 
     float offSet;
   
-
-  public:
-
     int SensorTest(){
       Serial.print("Testing Ultrasonics Sensor");Serial.println("");
       delay(10);

@@ -21,8 +21,6 @@ class SystemPrints {
     int printHeaders(){      
       Serial.print("inchesAVG: ");
       Serial.print("\t");
-      Serial.print("inchesLAST: ");
-      Serial.print("\t");
       Serial.print("High Float: "); 
       Serial.print("\t");
       Serial.print("Full Float: "); 
@@ -33,9 +31,9 @@ class SystemPrints {
     int SystemState() {
 
       float Level = WaterLevel.MIX_WaterLevel();
-      MIX_High = MixFloat.checkMIX_H();
-      MIX_Full = MixFloat.checkMIX_F();
-      MIX_Low = MixFloat.checkMIX_L();
+      MIX_High = MixFloat.checkMIX(MixFloat.MIX_HIGH);
+      MIX_Full = MixFloat.checkMIX(MixFloat.MIX_FULL);
+      MIX_Low = MixFloat.checkMIX(MixFloat.MIX_LOW);
 
 
       Serial.print(Level);

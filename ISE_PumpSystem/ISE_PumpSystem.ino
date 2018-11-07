@@ -41,12 +41,13 @@ void setup() {
   pinMode(mainFloat.MIX_FULL, INPUT_PULLUP);
   pinMode(mainFloat.MIX_LOW, INPUT_PULLUP);
 
- // mainPumps.primePUMPS();
-  //mainPumps.primeSystem();
+  mainPumps.primePUMPS();
+ mainPumps.primeSystem();
 }
 
 void loop() {
  //Water Level Sensors
+Serial.println("System Start");Serial.println("");
 
   if(mainFloat.checkDI() == LOW){
     delay(10);
@@ -74,6 +75,9 @@ void loop() {
     mainPumps.RunPump(mainPumps.Drain, Drain_Time, 4);
     Serial.println("DRAIN OFF");
     delay(1000);
+
+    mainPumps.RunPump(mainPumps.Drain, Drain_Time, 1);
+
     
   }
   else{

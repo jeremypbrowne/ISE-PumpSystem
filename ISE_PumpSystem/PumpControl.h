@@ -30,14 +30,13 @@ class PumpControl {
         if(Switch == 1){
           t = millis();
           delay(100);
-          Serial.println(t/60000);
           while((millis() - t) < duration){
             Output.SystemState();
           }
         }
         else if(Switch == 2){
           t = millis();
-          while((millis() - t) < duration && Float.checkMIX(Float.MIX_HIGH) != 0  ){
+          while((millis() - t) < duration && Float.checkMIX(Float.MIX_FULL) != 1  ){
             Output.SystemState();           
           }
         }
@@ -49,7 +48,7 @@ class PumpControl {
         }        
         else if(Switch == 4){
           t = millis();
-          while((millis() - t) < duration && Float.checkMIX(Float.MIX_LOW) != 1){
+          while((millis() - t) < duration && Float.checkMIX(Float.MIX_LOW) != 0){
             Output.SystemState();           
           }     
         }        
@@ -93,7 +92,7 @@ class PumpControl {
 
         Serial.println("Drain the Mix");
         Output.printHeaders();
-        while(Float.checkMIX(Float.MIX_LOW) != 1) { 
+        while(Float.checkMIX(Float.MIX_LOW) == 1) { 
           digitalWrite(Drain, LOW);
           Output.SystemState();
         }
@@ -107,7 +106,7 @@ class PumpControl {
         Serial.println("Calibration Fill");   
 
         Output.printHeaders();
-        while(Float.checkMIX(Float.MIX_FULL) != 0){
+        while(Float.checkMIX(Float.MIX_FULL) != 1){
         digitalWrite(DI_Water, LOW);
         Output.SystemState();
         }
@@ -120,7 +119,7 @@ class PumpControl {
 
         Serial.println("Drain the Mix");
         Output.printHeaders();
-        while(Float.checkMIX(Float.MIX_LOW) != 1){ 
+        while(Float.checkMIX(Float.MIX_LOW) == 1){ 
           digitalWrite(Drain, LOW);
           Output.SystemState();
         }
@@ -128,8 +127,8 @@ class PumpControl {
         digitalWrite(Drain, HIGH);
         delay(500);
         digitalWrite(Drain, LOW);
-        float t  = millis();
-        while((millis() - t) < 75000 && Float.checkMIX(Float.MIX_LOW) != 0){
+        t  = millis();
+        while((millis() - t) < 75000 && Float.checkMIX(Float.MIX_LOW) == 1){
           Output.SystemState();
         }
  

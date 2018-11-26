@@ -1,6 +1,5 @@
 #ifndef SYSTEMPRINTS_H
 #define SYSTEMPRINTS_H
-#include <TimeLib.h>
 
 #define TIME_HEADER  "T"   
 #define TIME_REQUEST  7
@@ -25,11 +24,15 @@ class SystemPrints {
 //  setTime(pctime); // Sync Arduino clock to the time received on the serial port
 
     
-    int printHeaders(){  
-      Serial.print("Time (sec)");
-      Serial.print("\t");         
-      Serial.print("inchesAVG: ");
+    int printHeaders(){ 
+      Serial.print("Run");   
+      Serial.print("\t"); 
+      Serial.print("Time (min)");
       Serial.print("\t");
+      Serial.print("Stage");   
+      Serial.print("\t\t");         
+//      Serial.print("inchesAVG: ");
+//      Serial.print("\t");
       Serial.print("High Float: "); 
       Serial.print("\t");
       Serial.print("Full Float: "); 
@@ -37,24 +40,61 @@ class SystemPrints {
       Serial.println("Low Float: "); 
      }
 
-    int SystemState() {
+    int SystemState(int Run, int Stage) {
 
-      //digitalClockDisplay();
+      Serial.print(Run);
+      Serial.print("\t");
 
       float j = millis();
       Serial.print(j/60000);
-      
       Serial.print("\t\t");
-      delay(10);
-      float Level = WaterLevel.MIX_WaterLevel();
-      Serial.print(Level);
+
+      if(Stage == 1){
+        Serial.print("AEP");
+        Serial.print("\t");
+      }
+      else if(Stage == 2){
+        Serial.print("DI Water");
+        Serial.print(" ");
+      }
+      else if(Stage == 3){
+        Serial.print("DI Peri");
+        Serial.print("\t");
+      }
+      else if(Stage == 4){
+        Serial.print("ISE");
+        Serial.print("\t");
+      }
+      else if(Stage == 5){
+        Serial.print("Drain");
+        Serial.print("\t");
+      }
+      else if(Stage == 6){
+        Serial.print("DI-Wash");
+        Serial.print("\t");
+      }
+      else if(Stage == 7){
+        Serial.print("ISE-Wash");
+        Serial.print(" ");
+      }
+      else if(Stage == 8){
+        Serial.print("Drain-Wash");
+        Serial.print(" ");
+      }
+      
+      //Serial.print("\t\t");
+      //delay(10);
+      //float Level = WaterLevel.MIX_WaterLevel();
+      //Serial.print(Level);
+
+      
       MIX_High = MixFloat.checkMIX(MixFloat.MIX_HIGH);
       if(MIX_High == 1){
-        Serial.print("\t\t");
+        Serial.print("\t");
         Serial.print("OFF");
       }
       else{
-        Serial.print("\t\t");
+        Serial.print("\t");
         Serial.print("TRIPPED");        
       }
       MIX_Full = MixFloat.checkMIX(MixFloat.MIX_FULL);
@@ -76,31 +116,8 @@ class SystemPrints {
         Serial.println("OFF");        
       }
 
-
-
-
+     delay(2000);
     };
-
-    void digitalClockDisplay(){
-      // digital clock display of the time
-      Serial.print(hour());
-      printDigits(minute());
-      printDigits(second());
-      Serial.print(" ");
-      Serial.print(day());
-      Serial.print(" ");
-      Serial.print(month());
-    };
-
-    void printDigits(int digits){
-      // utility function for digital clock display: prints preceding colon and leading 0
-      Serial.print(":");
-      if(digits < 10)
-        Serial.print('0');
-      Serial.print(digits);
-}
-
-    
 
 };
 #endif

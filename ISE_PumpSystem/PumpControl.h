@@ -22,34 +22,34 @@ class PumpControl {
     int ISE = 8;        // in6 -ISE Persitaltic
     float t;
 
-    int RunPump(int pump, float duration, int Switch){
+    int RunPump(int Run, int Stage, int pump, float duration, int Switch){
 
         digitalWrite(pump,LOW);
-        Output.printHeaders();
         delay(10);
+        
         if(Switch == 1){
           t = millis();
           delay(100);
           while((millis() - t) < duration){
-            Output.SystemState();
+            Output.SystemState(Run, Stage);
           }
         }
         else if(Switch == 2){
           t = millis();
           while((millis() - t) < duration && Float.checkMIX(Float.MIX_FULL) != 1  ){
-            Output.SystemState();           
+            Output.SystemState(Run, Stage);           
           }
         }
         else if(Switch == 3){
           t = millis();
           while((millis() - t) < duration && Float.checkMIX(Float.MIX_FULL) == 1){
-            Output.SystemState();           
+            Output.SystemState(Run, Stage);           
           }
         }        
         else if(Switch == 4){
           t = millis();
           while((millis() - t) < duration && Float.checkMIX(Float.MIX_LOW) != 0){
-            Output.SystemState();           
+            Output.SystemState(Run, Stage);           
           }     
         }        
         digitalWrite(pump,HIGH);    
@@ -94,7 +94,7 @@ class PumpControl {
         Output.printHeaders();
         while(Float.checkMIX(Float.MIX_LOW) == 1) { 
           digitalWrite(Drain, LOW);
-          Output.SystemState();
+          //Output.SystemState(Run, pump);
         }
   
         digitalWrite(Drain, HIGH);
@@ -108,7 +108,7 @@ class PumpControl {
         Output.printHeaders();
         while(Float.checkMIX(Float.MIX_FULL) != 1){
         digitalWrite(DI_Water, LOW);
-        Output.SystemState();
+        //Output.SystemState(Run, pump);
         }
         digitalWrite(DI_Water, HIGH);
         Serial.print("Pump OFF");
@@ -121,7 +121,7 @@ class PumpControl {
         Output.printHeaders();
         while(Float.checkMIX(Float.MIX_LOW) == 1){ 
           digitalWrite(Drain, LOW);
-          Output.SystemState();
+          //Output.SystemState(Run, pump);
         }
   
         digitalWrite(Drain, HIGH);
@@ -129,7 +129,7 @@ class PumpControl {
         digitalWrite(Drain, LOW);
         t  = millis();
         while((millis() - t) < 75000 && Float.checkMIX(Float.MIX_LOW) == 1){
-          Output.SystemState();
+          //Output.SystemState(Run, pump);
         }
  
         digitalWrite(Drain, HIGH);
